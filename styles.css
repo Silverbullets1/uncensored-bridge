@@ -22,7 +22,7 @@ body{
   filter:blur(14px); animation:drift 18s ease-in-out infinite alternate}
 @keyframes drift{0%{transform:translate3d(-3%,-2%,0) scale(1.05)}100%{transform:translate3d(3%,2%,0) scale(1.12)}}
 
-.app{position:relative;z-index:1;display:flex;height:100dvh}
+.app{position:relative;display:flex;height:100dvh}
 
 /* ===== Sidebar ===== */
 .sidebar{
@@ -103,7 +103,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 .composer{display:flex;align-items:flex-end;gap:10px;padding:12px 16px calc(var(--safe-b) + 12px);border-top:1px solid var(--line);background:rgba(12,12,22,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .input{flex:1;resize:none;max-height:120px;line-height:1.5;padding:12px 14px}
 
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:5;opacity:0;pointer-events:none;transition:.3s}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:15;opacity:0;pointer-events:none;transition:.3s}
 .scrim.show{opacity:1;pointer-events:auto}
 
 /* ===== Desktop ===== */
@@ -114,7 +114,7 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 }
 /* ===== Mobile / iOS ===== */
 @media(max-width:860px){
-  .sidebar{position:fixed;top:0;left:0;bottom:0;z-index:10;width:min(88vw,340px);
+  .sidebar{position:fixed;top:0;left:0;bottom:0;z-index:20;width:min(88vw,340px);
     background:rgba(12,12,22,.98); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
     transform:translateX(-105%);transition:transform .32s cubic-bezier(.4,0,.2,1);box-shadow:0 0 40px rgba(0,0,0,.6)}
   .sidebar.open{transform:translateX(0)}
