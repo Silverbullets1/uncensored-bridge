@@ -96,8 +96,8 @@ async function send() {
 
   const bubble = addMsg("bot", "");
   const thinkEl = document.createElement("div");
-  thinkEl.className = "think"; thinkEl.textContent = "…";
-  bubble.parentElement.querySelector(".bubble").insertBefore(thinkEl, bubble);
+  thinkEl.className = "think"; thinkEl.textContent = "Loading model… (first load ~20s on CPU)";
+  bubble.appendChild(thinkEl);
 
   const payload = {
     model: state.model,
@@ -114,8 +114,9 @@ async function send() {
       method: "POST", headers: { "Content-Type": "application/json" },
       mode: "cors", body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error("HTTP " + res.status);
+    if (!res.ok) throw new Error("HTTP " + (res.status || "fail"));
     const reader = res.body.getReader(); const dec = new TextDecoder(); let buf = "";
+    thinkEl.textContent = "…";
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -126,7 +127,7 @@ async function send() {
         const chunk = JSON.parse(line);
         const msg = chunk.message || {};
         if (msg.thinking) { thinking += msg.thinking; thinkEl.textContent = thinking; }
-        if (msg.content) { content += msg.content; bubble.textContent = content; }
+        if (msg.content) { content += msg.content; bubble.textContent = content; thinkEl.style.display = "none"; }
       }
       $("#messages").scrollTop = $("#messages").scrollHeight;
     }
