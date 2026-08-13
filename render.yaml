@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: uncensored-ollama
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/tags
+    envVars:
+      - key: OLLAMA_ORIGINS
+        value: "*"
