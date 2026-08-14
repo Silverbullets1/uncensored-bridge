@@ -180,7 +180,7 @@ function injectCredit() {
   }
   el.innerHTML = 'Developed by <a href="' + DEV_URL + '" target="_blank" rel="noopener">' + DEV_NAME + '</a>';
   // re-assert styles so CSS overrides / display:none can't hide it
-  el.setAttribute("style", "display:block!important;visibility:visible!important;text-align:center;padding:10px 16px;font-size:12px;color:#9a9ab8;position:relative;z-index:9999");
+  el.setAttribute("style", "display:block!important;visibility:visible!important;text-align:center;padding:10px 16px;font-size:12px;color:#9a9ab8;position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:9999;background:rgba(12,12,22,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08)");
   const a = el.querySelector("a");
   if (a) a.setAttribute("style", "color:#a855f7!important;text-decoration:none!important;font-weight:600!important");
 }
