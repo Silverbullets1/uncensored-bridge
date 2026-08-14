@@ -45,80 +45,70 @@ Uncensored Bridge flips the model:
 
 ---
 
-## ⚡ Quick Start (3 ways)
+## 📖 FULL WALKTHROUGH (new user, start to finish)
 
-### 🖥️ A. Local Ollama (Desktop — Chrome / Edge / Firefox)
-
-```bash
-# 1. Install Ollama  →  https://ollama.com/download
-# 2. Allow browser access (REQUIRED so the web UI can talk to it)::
-export OLLAMA_ORIGINS="*"          # macOS / Linux
-$env:OLLAMA_ORIGINS="*"            # Windows PowerShell
-
-# 3. Pull an uncensored model & run:
-ollama pull llama3.2:1b            # tiny + uncensored
-ollama pull qwen3:4b-abliterated   # stronger, uncensored
-ollama serve                       # start the API on :11434
-
-# 4. Open the tool → it auto-connects → pick a model → chat 🔥
+### Scenario 1 — You just want to USE it (hosted by someone)
 ```
+1. Open the tool URL in any browser (e.g. https://sage-dragon-13a69a.netlify.app/)
+2. Tap ⚙ (top-left gear) → Settings
+3. Endpoint is auto-filled (/api/ollama on hosted versions)
+4. Tap "Connect"
+5. Model dropdown populates → pick one (e.g. llama3.2:1b)
+6. Optional: pick a Persona (Lucifer / Dolphin / Coder / RP)
+7. Type a message → Send → chat 🔥
+```
+No install, no signup. iPhone: open in Safari → Share → "Add to Home Screen".
 
-> ⚠️ **Safari / iPhone** block `localhost` over HTTP from an HTTPS page. Use **Option B** (cloud) or the iOS tunnel below.
+### Scenario 2 — Deploy YOUR OWN (recommended for privacy)
 
----
-
-### ☁️ B. Your Own Cloud Ollama (Render / Railway) — works on iPhone ✅
-
-Deploy **your own** Ollama to a free tier (RAM-limited → use 1B–4B models):
-
-- **Render:** use the included `render.yaml` → *New → Blueprint* → deploy. Get `https://you.onrender.com`.
-- **Railway:** `railway up` with the included `Dockerfile`.
-- Paste that **HTTPS** URL into the tool's Endpoint field.
-
-> Free tiers ≈ 512MB–2GB RAM → stick to `llama3.2:1b`, `qwen3:4b-abliterated`, `dolphin-2.9`.
-
----
-
-### 📱 C. iPhone with your HOME Ollama (HTTPS tunnel)
-
+**Step A: Get Ollama running (your machine or free cloud)**
 ```bash
-# On the desktop running Ollama:
+# Local (desktop):
+ollama.com/download
+export OLLAMA_ORIGINS="*"        # allow browser to talk to it
+ollama pull llama3.2:1b
 ollama serve
-cloudflared tunnel --url http://localhost:11434
-# Copy the https://*.trycloudflare.com URL → open in iPhone Safari → Add to Home Screen
+
+# OR free cloud (Render: use included render.yaml / Railway: Dockerfile)
+# → you get an HTTPS URL like https://you.onrender.com
 ```
 
----
+**Step B: Deploy the tool (pick one):**
 
-## 🌐 Deploy THE TOOL Yourself (free, 2 min)
+**Netlify (best, HTTPS works on iPhone):**
+1. Fork `github.com/Silverbullets1/uncensored-bridge`
+2. netlify.com → Add new site → Import from Git → your fork
+3. Build command: *(blank)* · Publish dir: `.`
+4. Site settings → Environment variables → Add:
+   - Key: `OLLAMA_URL`
+   - Value: `https://your-ollama-url`  ← YOUR Ollama (HTTPS)
+5. Deploys → Trigger deploy
+6. Open `https://yoursite.netlify.app` → tool auto-uses `/api/ollama` ✅
 
-It's just static files — host it **free** anywhere. **You must set your own Ollama endpoint** (we don't host one for you):
-
-### Option 1: Netlify (recommended, HTTPS works everywhere)
-1. Fork this repo → **Netlify → Add new site → Import from Git** → select your fork
-2. Build command: _(blank)_ · Publish dir: `.`
-3. **Site settings → Environment variables → add:**
-   ```
-   OLLAMA_URL = https://your-ollama-url-here  (your own Ollama, HTTPS)
-   ```
-   _(If you skip this, the `/api/ollama` proxy has nothing to talk to — set it!)_
-4. Deploy → open `https://yoursite.netlify.app` → tool auto-uses `/api/ollama` ✅
-
-### Option 2: Vercel
-1. Import repo → Framework `Other` · Build _(blank)_ · Output `.`
-2. Add env var `OLLAMA_URL` = your Ollama HTTPS URL
+**Vercel:**
+1. Import repo → Framework `Other` · Build *(blank)* · Output `.`
+2. Add env `OLLAMA_URL` = your Ollama HTTPS URL
 3. Deploy → tool auto-uses `/api/ollama`
 
-### Option 3: GitHub Pages / any static host
+**GitHub Pages / any static host:**
 1. Enable Pages on your fork
-2. Open the tool → ⚙ → set **Endpoint** manually to your Ollama URL (HTTPS for iPhone)
-3. If you use plain HTTP Ollama, open the tool over **HTTP** too (mixed-content block on HTTPS)
+2. Open tool → ⚙ → set Endpoint = your Ollama URL (HTTPS for iPhone)
+3. Plain HTTP Ollama? Open tool over HTTP too (mixed-content block on HTTPS)
 
-### Option 4: Your own VPS (HTTP, no proxy)
+**Your own VPS (HTTP only):**
 ```bash
-cd uncensored-bridge
-python3 -m http.server 8080
-# open http://your-vps-ip:8080 → set Endpoint to http://your-vps-ip:11434
+cd uncensored-bridge && python3 -m http.server 8080
+# open http://your-ip:8080 → Endpoint http://your-ip:11434
+```
+
+**Step C:** Open your deployed tool → Connect → pick model → chat 🔥
+
+### Scenario 3 — Local dev (tool + Ollama both local)
+```bash
+ollama serve
+# another terminal:
+cd uncensored-bridge && python3 -m http.server 8080
+# open http://localhost:8080 → auto endpoint localhost:11434 → Connect
 ```
 
 ---
@@ -143,9 +133,20 @@ python3 -m http.server 8080
 
 ---
 
-## 🧠 Best Uncensored Models
+## ❓ Troubleshooting
 
-Abliterated models strip refusal but lose a little quality. For the best result, prefer **Dolphin fine-tunes** or **abliterated Qwen3**:
+| Problem | Fix |
+|---------|-----|
+| `failed` on Connect (HTTPS tool) | `OLLAMA_URL` env not set, or it's HTTP — use HTTPS Ollama / tunnel |
+| `failed` on Connect (local tool over HTTPS page) | Safari/iOS blocks localhost HTTP — use cloud Ollama or tunnel |
+| Models don't load / slow first response | Model cold-loading on CPU (~20s). Wait, or set `OLLAMA_KEEP_ALIVE=-1` |
+| `fetch failed` from proxy | `OLLAMA_URL` env missing/wrong on your deploy |
+| Voice button missing | Browser lacks WebSpeech (use Chrome/Edge/Safari) |
+| Mixed-content error | Tool HTTPS but Ollama HTTP — wrap with proxy or use HTTP tool |
+
+---
+
+## 🧠 Best Uncensored Models
 
 ```bash
 ollama pull qwen3:4b-abliterated     # fast, uncensored
