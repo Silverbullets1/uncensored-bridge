@@ -167,6 +167,32 @@ function autosize() {
   const t = $("#input"); t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 120) + "px";
 }
 
+/* ---------- Developer Credit (tamper-resistant) ---------- */
+const DEV_NAME = "Entouraged.sam";
+const DEV_URL = "https://github.com/LegendGod01";
+function injectCredit() {
+  let el = document.getElementById("devCredit");
+  if (!el) {
+    el = document.createElement("footer");
+    el.id = "devCredit";
+    el.className = "credit";
+    document.body.appendChild(el);
+  }
+  el.innerHTML = 'Developed by <a href="' + DEV_URL + '" target="_blank" rel="noopener">' + DEV_NAME + '</a>';
+  // re-assert styles so CSS overrides / display:none can't hide it
+  el.setAttribute("style", "display:block!important;visibility:visible!important;text-align:center;padding:10px 16px;font-size:12px;color:#9a9ab8;position:relative;z-index:9999");
+  const a = el.querySelector("a");
+  if (a) a.setAttribute("style", "color:#a855f7!important;text-decoration:none!important;font-weight:600!important");
+}
+// watch for anyone removing/hiding the credit → re-inject
+const creditObserver = new MutationObserver(() => {
+  const el = document.getElementById("devCredit");
+  if (!el || el.offsetParent === null || getComputedStyle(el).display === "none") {
+    injectCredit();
+    console.warn("[Uncensored Bridge] Developer credit is protected. Removing it violates the license.");
+  }
+});
+
 /* ---------- Wire up ---------- */
 window.addEventListener("DOMContentLoaded", () => {
   // auto-set endpoint field based on where the tool is hosted
@@ -175,6 +201,8 @@ window.addEventListener("DOMContentLoaded", () => {
   $("#endpoint").value = autoEp;
   state.endpoint = autoEp;
   loadPresets(); initVoice();
+  injectCredit();
+  creditObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class"] });
   $("#connectBtn").onclick = connect;
   $("#sendBtn").onclick = send;
   $("#openSide").onclick = openSide;
