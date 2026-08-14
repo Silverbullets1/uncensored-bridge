@@ -182,3 +182,7 @@ PRs welcome! Add a persona, a UI tweak, a deploy template. Keep it **client-only
 ## 📄 License
 
 [MIT](LICENSE) © Silverbullets1
+
+---
+
+Developed by [**Entouraged.sam**](https://github.com/LegendGod01)

@@ -104,7 +104,9 @@ select.field{appearance:none;background-image:linear-gradient(45deg,transparent 
 .composer{display:flex;align-items:flex-end;gap:10px;padding:12px 16px calc(var(--safe-b) + 12px);border-top:1px solid var(--line);background:rgba(12,12,22,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .input{flex:1;resize:none;max-height:120px;line-height:1.5;padding:12px 14px}
 
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:15;opacity:0;pointer-events:none;transition:.3s}
+.credit{text-align:center;padding:10px 16px calc(var(--safe-b) + 6px);font-size:12px;color:var(--dim)}
+.credit a{color:var(--accent2);text-decoration:none;font-weight:600}
+.credit a:hover{text-decoration:underline}
 .scrim.show{opacity:1;pointer-events:auto}
 
 /* ===== Desktop ===== */
