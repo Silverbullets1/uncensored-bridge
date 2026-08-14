@@ -1,0 +1,15 @@
+[build]
+  publish = "."
+  functions = "api"
+
+[[redirects]]
+  from = "/api/ollama/*"
+  to = "/.netlify/functions/ollama/:splat"
+  status = 200
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
