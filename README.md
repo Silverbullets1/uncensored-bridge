@@ -45,28 +45,29 @@ Uncensored Bridge flips the model:
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (3 ways)
 
 ### 🖥️ A. Local Ollama (Desktop — Chrome / Edge / Firefox)
 
 ```bash
 # 1. Install Ollama  →  https://ollama.com/download
-# 2. Allow browser access (REQUIRED):
+# 2. Allow browser access (REQUIRED so the web UI can talk to it)::
 export OLLAMA_ORIGINS="*"          # macOS / Linux
 $env:OLLAMA_ORIGINS="*"            # Windows PowerShell
 
 # 3. Pull an uncensored model & run:
-ollama pull qwen3-4b-65k            # fast + uncensored
-ollama serve                       # start the API
+ollama pull llama3.2:1b            # tiny + uncensored
+ollama pull qwen3:4b-abliterated   # stronger, uncensored
+ollama serve                       # start the API on :11434
 
 # 4. Open the tool → it auto-connects → pick a model → chat 🔥
 ```
 
-> ⚠️ **Safari / iPhone** block `localhost` over HTTP from an HTTPS page. Use **Option B** or the iOS tunnel below.
+> ⚠️ **Safari / iPhone** block `localhost` over HTTP from an HTTPS page. Use **Option B** (cloud) or the iOS tunnel below.
 
 ---
 
-### ☁️ B. Free Cloud Ollama (Render / Railway) — works on iPhone ✅
+### ☁️ B. Your Own Cloud Ollama (Render / Railway) — works on iPhone ✅
 
 Deploy **your own** Ollama to a free tier (RAM-limited → use 1B–4B models):
 
@@ -89,26 +90,68 @@ cloudflared tunnel --url http://localhost:11434
 
 ---
 
+## 🌐 Deploy THE TOOL Yourself (free, 2 min)
+
+It's just static files — host it **free** anywhere. **You must set your own Ollama endpoint** (we don't host one for you):
+
+### Option 1: Netlify (recommended, HTTPS works everywhere)
+1. Fork this repo → **Netlify → Add new site → Import from Git** → select your fork
+2. Build command: _(blank)_ · Publish dir: `.`
+3. **Site settings → Environment variables → add:**
+   ```
+   OLLAMA_URL = https://your-ollama-url-here  (your own Ollama, HTTPS)
+   ```
+   _(If you skip this, the `/api/ollama` proxy has nothing to talk to — set it!)_
+4. Deploy → open `https://yoursite.netlify.app` → tool auto-uses `/api/ollama` ✅
+
+### Option 2: Vercel
+1. Import repo → Framework `Other` · Build _(blank)_ · Output `.`
+2. Add env var `OLLAMA_URL` = your Ollama HTTPS URL
+3. Deploy → tool auto-uses `/api/ollama`
+
+### Option 3: GitHub Pages / any static host
+1. Enable Pages on your fork
+2. Open the tool → ⚙ → set **Endpoint** manually to your Ollama URL (HTTPS for iPhone)
+3. If you use plain HTTP Ollama, open the tool over **HTTP** too (mixed-content block on HTTPS)
+
+### Option 4: Your own VPS (HTTP, no proxy)
+```bash
+cd uncensored-bridge
+python3 -m http.server 8080
+# open http://your-vps-ip:8080 → set Endpoint to http://your-vps-ip:11434
+```
+
+---
+
+## 🔧 How It Works (architecture)
+
+```
+┌─────────────┐      fetch       ┌──────────────┐
+│  Your Browser │ ──────────────▶ │  Your Ollama  │
+│  (the tool)   │  (client-only)  │  (your model) │
+└─────────────┘                  └──────────────┘
+       │
+       │  if hosted on HTTPS (Netlify/Vercel):
+       │  /api/ollama/*  ──▶ serverless proxy ──▶ your Ollama URL
+       │  (proxy reads OLLAMA_URL env, forwards request)
+       └─  no logs, no storage, request passthrough only
+```
+
+- **The tool is 100% static** — HTML/CSS/JS only, no server code bundled.
+- **The optional proxy** (`api/ollama.js`) is a thin pass-through. It reads `OLLAMA_URL` from **your** deploy's env vars. We never see your traffic.
+- **Your endpoint + license** live only in your browser's `localStorage`.
+
+---
+
 ## 🧠 Best Uncensored Models
 
 Abliterated models strip refusal but lose a little quality. For the best result, prefer **Dolphin fine-tunes** or **abliterated Qwen3**:
 
 ```bash
-ollama pull qwen3-4b-65k          # fast, uncensored (used by presets)
-ollama pull dolphin-llama3:8b     # stronger, trained uncensored
-ollama pull llama3.2:1b           # tiny, for free cloud tiers
+ollama pull qwen3:4b-abliterated     # fast, uncensored
+ollama pull dolphin-llama3:8b        # stronger, trained uncensored
+ollama pull llama3.2:1b             # tiny, for free cloud tiers
 ```
-
----
-
-## 🌐 Deploy the Tool (optional)
-
-It's just static files — host it **free** anywhere:
-
-- **Vercel / Netlify / GitHub Pages:** push this repo → auto-deploys.
-- **Your VPS:** `python3 -m http.server 8080` inside the folder.
-
-No env vars, no secrets, no build step.
 
 ---
 
@@ -125,9 +168,9 @@ Free tier stays serverless and **never paywalled** — that is the core privacy 
 
 ## 🛡️ Privacy
 
-- Zero backend. Every request goes **browser → your Ollama**.
+- Zero backend. Every request goes **browser → your Ollama** (or your proxy → your Ollama).
 - No analytics, no cookies, no server-side storage of conversations.
-- Your endpoint + license live only in your browser's `localStorage`.
+- The proxy function stores **nothing** — it forwards and forgets.
 
 ---
 

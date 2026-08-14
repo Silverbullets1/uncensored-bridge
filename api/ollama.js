@@ -1,5 +1,7 @@
-// Netlify Serverless Function — proxies /api/ollama/* to VPS Ollama (HTTPS→HTTP internal)
-const OLLAMA = process.env.OLLAMA_URL || "http://152.67.14.127:11434";
+// Netlify Serverless Function — proxies /api/ollama/* to YOUR Ollama.
+// SECURITY: reads OLLAMA_URL from Netlify/Vercel env vars.
+// Open-source users MUST set OLLAMA_URL to THEIR OWN Ollama — never hardcode someone else's IP.
+const OLLAMA = process.env.OLLAMA_URL || "http://localhost:11434";
 
 exports.handler = async (event) => {
   const path = event.path.replace(/^\/api\/ollama/, "") || "/";
@@ -31,7 +33,6 @@ exports.handler = async (event) => {
       };
     }
 
-    // Stream (chat)
     const reader = r.body.getReader();
     const decoder = new TextDecoder();
     let out = "";
@@ -52,7 +53,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 502,
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: String(e) }),
+      body: JSON.stringify({ error: String(e), hint: "Set OLLAMA_URL env to your Ollama. Function cannot reach it." }),
     };
   }
 };
