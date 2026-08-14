@@ -3,6 +3,9 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "framework": null,
+  "rewrites": [
+    { "source": "/api/ollama/(.*)", "destination": "/api/ollama.mjs" }
+  ],
   "routes": [
     { "src": "/(.*)", "dest": "/$1" }
   ]

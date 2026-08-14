@@ -3,7 +3,9 @@ const PRO_FEATURES = false;
 const $ = (s) => document.querySelector(s);
 
 const state = {
-  endpoint: "http://localhost:11434", model: "", system: "",
+  endpoint: (location.hostname.endsWith(".vercel.app") || location.hostname === "silverbullets1.github.io")
+    ? "/api/ollama" : "http://localhost:11434",
+  model: "", system: "",
   temp: 0.8, messages: [], thinking: false, connected: false, pro: false,
 };
 
