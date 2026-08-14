@@ -16,9 +16,9 @@ body{
 /* animated gradient mesh background */
 .mesh{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(40% 50% at 15% 10%, rgba(168,85,247,.25), transparent 60%),
-    radial-gradient(45% 55% at 85% 15%, rgba(255,45,85,.22), transparent 60%),
-    radial-gradient(50% 60% at 50% 100%, rgba(34,211,238,.18), transparent 60%);
+    radial-gradient(40% 50% at 15% 10%, rgba(168,85,247,.18), transparent 60%),
+    radial-gradient(45% 55% at 85% 15%, rgba(255,45,85,.15), transparent 60%),
+    radial-gradient(50% 60% at 50% 100%, rgba(34,211,238,.12), transparent 60%);
   filter:blur(14px); animation:drift 18s ease-in-out infinite alternate}
 @keyframes drift{0%{transform:translate3d(-3%,-2%,0) scale(1.05)}100%{transform:translate3d(3%,2%,0) scale(1.12)}}
 
