@@ -1,9 +1,9 @@
 {
   "version": 2,
   "functions": {
-    "api/ollama.mjs": { "maxDuration": 60 }
+    "api/ollama.js": { "maxDuration": 60 }
   },
   "rewrites": [
-    { "source": "/api/ollama/(.*)", "destination": "/api/ollama.mjs" }
+    { "source": "/api/ollama/(.*)", "destination": "/api/ollama.js" }
   ]
 }
