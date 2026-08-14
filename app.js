@@ -169,6 +169,11 @@ function autosize() {
 
 /* ---------- Wire up ---------- */
 window.addEventListener("DOMContentLoaded", () => {
+  // auto-set endpoint field based on where the tool is hosted
+  const autoEp = (location.hostname.endsWith(".vercel.app") || location.hostname.endsWith(".netlify.app") || location.hostname === "silverbullets1.github.io")
+    ? "/api/ollama" : "http://localhost:11434";
+  $("#endpoint").value = autoEp;
+  state.endpoint = autoEp;
   loadPresets(); initVoice();
   $("#connectBtn").onclick = connect;
   $("#sendBtn").onclick = send;
