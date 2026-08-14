@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "functions": {
-    "api/ollama.js": { "maxDuration": 60 }
-  },
-  "rewrites": [
-    { "source": "/api/ollama/(.*)", "destination": "/api/ollama.js" }
+  "builds": [
+    { "src": "api/ollama.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/ollama/(.*)", "dest": "api/ollama.js" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
