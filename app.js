@@ -171,27 +171,20 @@ function autosize() {
 const DEV_NAME = "Entouraged.sam";
 const DEV_URL = "https://github.com/LegendGod01";
 function injectCredit() {
-  let el = document.getElementById("devCredit");
-  if (!el) {
-    el = document.createElement("footer");
-    el.id = "devCredit";
-    el.className = "credit";
-    document.body.appendChild(el);
-  }
-  el.innerHTML = 'Developed by <a href="' + DEV_URL + '" target="_blank" rel="noopener">' + DEV_NAME + '</a>';
-  // re-assert styles so CSS overrides / display:none can't hide it
-  el.setAttribute("style", "display:block!important;visibility:visible!important;text-align:center;padding:8px 16px;font-size:12px;color:#9a9ab8;position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:9999;background:rgba(12,12,22,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08)");
-  const a = el.querySelector("a");
-  if (a) a.setAttribute("style", "color:#a855f7!important;text-decoration:none!important;font-weight:600!important");
+  try {
+    let el = document.getElementById("devCredit");
+    if (!el) {
+      el = document.createElement("footer");
+      el.id = "devCredit";
+      el.className = "credit";
+      document.body.appendChild(el);
+    }
+    el.innerHTML = 'Developed by <a href="' + DEV_URL + '" target="_blank" rel="noopener">' + DEV_NAME + '</a>';
+    el.setAttribute("style", "display:block!important;visibility:visible!important;text-align:center;padding:8px 16px;font-size:12px;color:#9a9ab8;position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:9999;background:rgba(12,12,22,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.08)");
+    const a = el.querySelector("a");
+    if (a) a.setAttribute("style", "color:#a855f7!important;text-decoration:none!important;font-weight:600!important");
+  } catch (e) {}
 }
-// watch for anyone removing/hiding the credit → re-inject
-const creditObserver = new MutationObserver(() => {
-  const el = document.getElementById("devCredit");
-  if (!el || el.offsetParent === null || getComputedStyle(el).display === "none") {
-    injectCredit();
-    console.warn("[Uncensored Bridge] Developer credit is protected. Removing it violates the license.");
-  }
-});
 
 /* ---------- Wire up ---------- */
 window.addEventListener("DOMContentLoaded", () => {
@@ -201,8 +194,17 @@ window.addEventListener("DOMContentLoaded", () => {
   $("#endpoint").value = autoEp;
   state.endpoint = autoEp;
   loadPresets(); initVoice();
-  injectCredit();
-  try { creditObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class"] }); } catch(e) {}
+  // credit (isolated so it can never break the app)
+  try {
+    injectCredit();
+    if (typeof MutationObserver !== "undefined") {
+      const creditObserver = new MutationObserver(() => {
+        const el = document.getElementById("devCredit");
+        if (!el || el.offsetParent === null || getComputedStyle(el).display === "none") injectCredit();
+      });
+      creditObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class"] });
+    }
+  } catch (e) {}
   $("#connectBtn").onclick = connect;
   $("#sendBtn").onclick = send;
   $("#openSide").onclick = openSide;
