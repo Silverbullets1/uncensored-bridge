@@ -200,9 +200,11 @@ window.addEventListener("DOMContentLoaded", () => {
     if (typeof MutationObserver !== "undefined") {
       const creditObserver = new MutationObserver(() => {
         const el = document.getElementById("devCredit");
-        if (!el || el.offsetParent === null || getComputedStyle(el).display === "none") injectCredit();
+        if (!el) { injectCredit(); return; }
+        const cs = getComputedStyle(el);
+        if (cs.display === "none" || cs.visibility === "hidden") injectCredit();
       });
-      creditObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["style", "class"] });
+      creditObserver.observe(document.body, { childList: true, subtree: true });
     }
   } catch (e) {}
   $("#connectBtn").onclick = connect;
