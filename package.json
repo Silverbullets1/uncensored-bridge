@@ -1,0 +1,9 @@
+{
+  "name": "uncensored-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"static site, no build\"",
+    "start": "echo \"served by vercel\""
+  }
+}
