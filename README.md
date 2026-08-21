@@ -35,7 +35,7 @@ Uncensored Bridge flips the model:
 
 ## ✨ Features
 
-- 🔥 **Uncensored out of the box** — ships with Hinglish "Lucifer", Dolphin, Coder & Roleplay presets
+- 🔥 **Uncensored when pointed at an uncensored model** — ships with Hinglish "Lucifer", Dolphin, Coder & Roleplay presets (pick an abliterated/dolphin model to go fully uncensored)
 - 🧠 **Bring Any Model** — point it at your Ollama, pick any model you pulled
 - 📱 **PWA** — "Add to Home Screen" on iOS/Android, feels like a native app
 - 🎤 **Voice input** — speak to your model (WebSpeech)
@@ -49,11 +49,12 @@ Uncensored Bridge flips the model:
 
 ### Scenario 1 — You just want to USE it (hosted by someone)
 ```
-1. Open the tool URL in any browser (e.g. https://sage-dragon-13a69a.netlify.app/)
+1. Open the demo UI in any browser (no signup, client-only): https://sage-dragon-13a69a.netlify.app
+   → tap ⚙ (gear) → change Endpoint to YOUR OWN Ollama (e.g. http://your-ip:11434 or http://localhost:11434) → Connect
 2. Tap ⚙ (top-left gear) → Settings
 3. Endpoint is auto-filled (/api/ollama on hosted versions)
 4. Tap "Connect"
-5. Model dropdown populates → pick one (e.g. llama3.2:1b)
+5. Model dropdown populates → pick one (e.g. sadiq-bd/llama3.2-1b-uncensored)
 6. Optional: pick a Persona (Lucifer / Dolphin / Coder / RP)
 7. Type a message → Send → chat 🔥
 ```
@@ -66,7 +67,7 @@ No install, no signup. iPhone: open in Safari → Share → "Add to Home Screen"
 # Local (desktop):
 ollama.com/download
 export OLLAMA_ORIGINS="*"        # allow browser to talk to it
-ollama pull llama3.2:1b
+ollama pull sadiq-bd/llama3.2-1b-uncensored   # uncensored by default
 ollama serve
 
 # OR free cloud (Render: use included render.yaml / Railway: Dockerfile)
@@ -95,10 +96,12 @@ ollama serve
 2. Open tool → ⚙ → set Endpoint = your Ollama URL (HTTPS for iPhone)
 3. Plain HTTP Ollama? Open tool over HTTP too (mixed-content block on HTTPS)
 
-**Your own VPS (HTTP only):**
+**Your own VPS (host the UI only — do NOT serve models publicly):**
 ```bash
-cd uncensored-bridge && python3 -m http.server 8080
-# open http://your-ip:8080 → Endpoint http://your-ip:11434
+cd uncensored-bridge && python3 serve.py
+# open http://your-ip:8080 → set Endpoint = YOUR OWN Ollama URL
+# Run Ollama on localhost:11434 on THIS same machine, or point to your
+# PRIVATE Ollama. ⚠️ Never expose :11434 to 0.0.0.0 — anyone can burn your GPU/compute.
 ```
 
 **Step C:** Open your deployed tool → Connect → pick model → chat 🔥
@@ -107,7 +110,7 @@ cd uncensored-bridge && python3 -m http.server 8080
 ```bash
 ollama serve
 # another terminal:
-cd uncensored-bridge && python3 -m http.server 8080
+cd uncensored-bridge && python3 serve.py
 # open http://localhost:8080 → auto endpoint localhost:11434 → Connect
 ```
 
@@ -151,7 +154,7 @@ cd uncensored-bridge && python3 -m http.server 8080
 ```bash
 ollama pull qwen3:4b-abliterated     # fast, uncensored
 ollama pull dolphin-llama3:8b        # stronger, trained uncensored
-ollama pull llama3.2:1b             # tiny, for free cloud tiers
+ollama pull sadiq-bd/llama3.2-1b-uncensored   # tiny + uncensored, for free cloud tiers
 ```
 
 ---
